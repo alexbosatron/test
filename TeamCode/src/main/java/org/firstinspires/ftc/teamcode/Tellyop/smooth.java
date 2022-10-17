@@ -72,7 +72,7 @@ public class smooth extends LinearOpMode {
             m2.setPower(frontLeftPower);
             m1.setPower(backLeftPower);
             m3.setPower(frontRightPower);
-            m4.setPower(backRightPower)
+            m4.setPower(backRightPower);
 
 
 
