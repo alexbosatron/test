@@ -1,8 +1,4 @@
 package org.firstinspires.ftc.teamcode.Tellyop;
-
-
-
-
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.hardware.bosch.BNO055IMU.AccelUnit;
@@ -38,15 +34,14 @@ public class smooth extends LinearOpMode {
         m4.setDirection(Direction.REVERSE);
         m2.setDirection(Direction.REVERSE);
         m3.setDirection(Direction.REVERSE);
-        //reverse motors on the left side
+        //reverse motors until it works
         BNO055IMU imu = hardwareMap.get(BNO055IMU.class, "imu");
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
         // this is the default but we should still put this
         parameters.angleUnit = BNO055IMU.AngleUnit.RADIANS;
-        // So we dont het an exception
+        // So we don't get an exception
         imu.initialize(parameters);
 
-        waitForStart();
 
         if (isStopRequested()) return;
 
