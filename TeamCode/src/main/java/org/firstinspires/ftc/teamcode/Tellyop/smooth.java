@@ -48,7 +48,7 @@ public class smooth extends LinearOpMode {
         while (opModeIsActive()) {
             double y = (-gamepad1.left_stick_y); //remember to revers it
             double x = (gamepad1.left_stick_x * 1.1); //gives us about equal speed when strafing
-            double rx = (gamepad1.right_stick_x)/1.3;
+            double rx = (gamepad1.right_stick_x)/1.3; // slightly slower speed when rotating 
 
             // Read inverse IMU heading, as the IMU heading is CW positive
             double angle2 = -imu.getAngularOrientation().firstAngle;
@@ -63,6 +63,7 @@ public class smooth extends LinearOpMode {
             // Denominator is the largest motor power (absolute value) or 1
             // This ensures all the powers maintain the same ratio, but only when
             // at least one is out of the range [-1, 1]
+            //sometioms a motor can get a vlaue of 2 when this happens it will dived the other motors by 2 so it beheaves correctly 
             double denominator = Math.max(Math.abs(y) + Math.abs(x) + Math.abs(rx), 1);
             double frontLeftPower = ((rotY + (rotX * 1.5) + rx) / denominator)/3;
             double backLeftPower = ((rotY - (rotX * 1.1)  + rx) / denominator)/3;
