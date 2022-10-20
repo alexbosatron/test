@@ -29,6 +29,8 @@ public class smooth extends LinearOpMode {
         DcMotor m2 = (DcMotor)this.hardwareMap.dcMotor.get("front_left");
         DcMotor m3 = (DcMotor)this.hardwareMap.dcMotor.get("front_right");
         DcMotor m4 = (DcMotor)this.hardwareMap.dcMotor.get("back_right");
+        DcMotor m5 = (DcMotor)this.hardwareMap.dcMotor.get("slide");
+        Servo clawServo = (Servo)this.hardwareMap.get("clawServo");
 
         //sets the motor mapping. get should be the name form when we config the robot.
         m4.setDirection(Direction.REVERSE);
@@ -65,15 +67,20 @@ public class smooth extends LinearOpMode {
             // at least one is out of the range [-1, 1]
             //sometioms a motor can get a vlaue of 2 when this happens it will dived the other motors by 2 so it beheaves correctly 
             double denominator = Math.max(Math.abs(y) + Math.abs(x) + Math.abs(rx), 1);
-            double frontLeftPower = ((rotY + (rotX * 1.5) + rx) / denominator)/3;
-            double backLeftPower = ((rotY - (rotX * 1.1)  + rx) / denominator)/3;
-            double frontRightPower = ((rotY - (rotX * 1.1) - rx) / denominator)/3;
-            double backRightPower = ((rotY + rotX - rx) / denominator)/3;
+            double frontLeftPower = ((rotY + (rotX * 1.5) + rx) / denominator)/2.1;
+            double backLeftPower = ((rotY - (rotX * 1.1)  + rx) / denominator)/2.1;
+            double frontRightPower = ((rotY - (rotX * 1.1) - rx) / denominator)/2.1;
+            double backRightPower = ((rotY + rotX - rx) / denominator)/2.1;
+            double slidePower = gamepad1.left_trigger-gamepad1.right_trigger;
+            if (gamepad1.x) clawServo.setPosition(.35);
+            if (gamepad1.y) clawServo.setPosition(.6);
+
 
             m2.setPower(frontLeftPower);
             m1.setPower(backLeftPower);
             m3.setPower(frontRightPower);
             m4.setPower(backRightPower);
+            m5.setPower(slidePower);
 
 
 
