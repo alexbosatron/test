@@ -1,0 +1,81 @@
+package org.firstinspires.ftc.teamcode.Tellyop;
+import com.qualcomm.hardware.bosch.BNO055IMU;
+import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.hardware.bosch.BNO055IMU.AccelUnit;
+import com.qualcomm.hardware.bosch.BNO055IMU.AngleUnit;
+import com.qualcomm.hardware.bosch.BNO055IMU.Parameters;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.ColorSensor;
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DistanceSensor;
+import com.qualcomm.robotcore.hardware.DcMotor.RunMode;
+import com.qualcomm.robotcore.hardware.DcMotorSimple.Direction;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
+
+
+@TeleOp
+
+public class normalDrive extends LinearOpMode {
+    public normalDrive(){
+    }
+
+    public void runOpMode() throws InterruptedException {
+        waitForStart();
+        DcMotor m1 = (DcMotor)this.hardwareMap.dcMotor.get("back_left");
+        DcMotor m2 = (DcMotor)this.hardwareMap.dcMotor.get("front_left");
+        DcMotor m3 = (DcMotor)this.hardwareMap.dcMotor.get("front_right");
+        DcMotor m4 = (DcMotor)this.hardwareMap.dcMotor.get("back_right");
+        DcMotor m5 = (DcMotor)this.hardwareMap.dcMotor.get("slide");
+        Servo clawServo = (Servo)this.hardwareMap.get("clawServo");
+
+        //sets the motor mapping. get should be the name form when we config the robot.
+        m4.setDirection(Direction.REVERSE);
+        m2.setDirection(Direction.REVERSE);
+        m3.setDirection(Direction.REVERSE);
+        //reverse motors until it works
+
+
+
+        if (isStopRequested()) return;
+
+        while (opModeIsActive()) {
+            double y = (-gamepad1.left_stick_y); //remember to revers it
+            double x = (gamepad1.left_stick_x * 1.1); //gives us about equal speed when strafing
+            double rx = (gamepad1.right_stick_x)/1.3; // slightly slower speed when rotating
+
+
+
+
+
+
+            // Denominator is the largest motor power (absolute value) or 1
+            // This ensures all the powers maintain the same ratio, but only when
+            // at least one is out of the range [-1, 1]
+            //sometioms a motor can get a vlaue of 2 when this happens it will dived the other motors by 2 so it beheaves correctly
+            double denominator = Math.max(Math.abs(y) + Math.abs(x) + Math.abs(rx), 1);
+            double frontLeftPower = ((y + (x * 1.5) + rx) / denominator)/2.1;
+            double backLeftPower = ((y - (x * 1.1)  + rx) / denominator)/2.1;
+            double frontRightPower = ((y - (x * 1.1) - rx) / denominator)/2.1;
+            double backRightPower = ((y + x - rx) / denominator)/2.1;
+            double slidePower = gamepad1.left_trigger-gamepad1.right_trigger;
+            if (gamepad1.x) clawServo.setPosition(.35);
+            if (gamepad1.y) clawServo.setPosition(.6);
+
+
+            m2.setPower(frontLeftPower);
+            m1.setPower(backLeftPower);
+            m3.setPower(frontRightPower);
+            m4.setPower(backRightPower);
+            m5.setPower(slidePower);
+
+
+
+        }
+    }
+}
+
+
