@@ -21,8 +21,10 @@
 
 package org.firstinspires.ftc.teamcode.Auto;
 
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.openftc.apriltag.AprilTagDetection;
@@ -32,9 +34,12 @@ import org.openftc.easyopencv.OpenCvCameraRotation;
 
 import java.util.ArrayList;
 
-@TeleOp
+@Autonomous
 public class autoLeft extends LinearOpMode
 {
+
+
+
     OpenCvCamera camera;
     AprilTagDetectionPipeline aprilTagDetectionPipeline;
 
@@ -61,9 +66,17 @@ public class autoLeft extends LinearOpMode
     @Override
     public void runOpMode()
     {
+        DcMotor m1 = (DcMotor)this.hardwareMap.dcMotor.get("back_left");
+        DcMotor m2 = (DcMotor)this.hardwareMap.dcMotor.get("front_left");
+        DcMotor m3 = (DcMotor)this.hardwareMap.dcMotor.get("front_right");
+        DcMotor m4 = (DcMotor)this.hardwareMap.dcMotor.get("back_right");
+
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         camera = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
         aprilTagDetectionPipeline = new AprilTagDetectionPipeline(tagsize, fx, fy, cx, cy);
+        m4.setDirection(DcMotorSimple.Direction.REVERSE);
+        m2.setDirection(DcMotorSimple.Direction.REVERSE);
+        m3.setDirection(DcMotorSimple.Direction.REVERSE);
 
         camera.setPipeline(aprilTagDetectionPipeline);
         camera.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener()
@@ -166,16 +179,62 @@ public class autoLeft extends LinearOpMode
 
         /* Actually do something useful */
         if(tagOfInterest == null|| tagOfInterest.id == left){
-            // code to park in the left
+         m1.setPower(.6);
+         m2.setPower(-.6);
+         m3.setPower(.85);
+         m4.setPower(-.6);
+         sleep(850);
+         m3.setPower(0);
+         m1.setPower(0);
+         m2.setPower(0);
+         m4.setPower(0);
+         sleep(2000);
+         m1.setPower(.6);
+         m2.setPower(.6);
+         m3.setPower(.6);
+         m4.setPower(.6);
+         sleep(275);
+          m1.setPower(0);
+          m2.setPower(0);
+            m3.setPower(0);
+            m4.setPower(0);
         } else if(tagOfInterest.id == mid){
-            // code to park middle
+            m1.setPower(.5);
+            m2.setPower(.5);
+            m3.setPower(.5);
+            m4.setPower(.5);
+            sleep(450);
+            m3.setPower(0);
+            m1.setPower(0);
+            m2.setPower(0);
+            m4.setPower(0);
+
         }else{
-            // code to park left
+            m1.setPower(-.6);
+            m2.setPower(.6);
+            m3.setPower(-.85);
+            m4.setPower(.6);
+            sleep(700);
+            m3.setPower(0);
+            m1.setPower(0);
+            m2.setPower(0);
+            m4.setPower(0);
+            sleep(2000);
+            m1.setPower(.6);
+            m2.setPower(.6);
+            m3.setPower(.6);
+            m4.setPower(.6);
+            sleep(350);
+            m1.setPower(0);
+            m2.setPower(0);
+            m3.setPower(0);
+            m4.setPower(0);
+
+
         }
 
 
-        /* when we make the auto delete this. it justo stops the code form ending  */
-        while (opModeIsActive()) {sleep(20);}
+
     }
 
     void tagToTelemetry(AprilTagDetection detection)
