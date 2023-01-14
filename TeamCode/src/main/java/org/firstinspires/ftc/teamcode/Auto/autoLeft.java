@@ -49,6 +49,7 @@ public class autoLeft extends LinearOpMode
     // UNITS ARE PIXELS
     // NOTE: this calibration is for the C920 webcam at 800x448.
     // You will need to do your own calibration for other configurations!
+    // **we dont use this**
     double fx = 578.272;
     double fy = 578.272;
     double cx = 402.145;
@@ -66,17 +67,17 @@ public class autoLeft extends LinearOpMode
     @Override
     public void runOpMode()
     {
-        DcMotor m1 = (DcMotor)this.hardwareMap.dcMotor.get("back_left");
-        DcMotor m2 = (DcMotor)this.hardwareMap.dcMotor.get("front_left");
-        DcMotor m3 = (DcMotor)this.hardwareMap.dcMotor.get("front_right");
-        DcMotor m4 = (DcMotor)this.hardwareMap.dcMotor.get("back_right");
+        DcMotor m1 = (DcMotor)this.hardwareMap.dcMotor.get("Back_left");
+        DcMotor m2 = (DcMotor)this.hardwareMap.dcMotor.get("Front_left");
+        DcMotor m3 = (DcMotor)this.hardwareMap.dcMotor.get("Front_right");
+        DcMotor m4 = (DcMotor)this.hardwareMap.dcMotor.get("Back_right");
 
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         camera = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
         aprilTagDetectionPipeline = new AprilTagDetectionPipeline(tagsize, fx, fy, cx, cy);
         m4.setDirection(DcMotorSimple.Direction.REVERSE);
         m2.setDirection(DcMotorSimple.Direction.REVERSE);
-        m3.setDirection(DcMotorSimple.Direction.REVERSE);
+        m1.setDirection(DcMotorSimple.Direction.REVERSE);
 
         camera.setPipeline(aprilTagDetectionPipeline);
         camera.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener()
@@ -247,4 +248,5 @@ public class autoLeft extends LinearOpMode
         telemetry.addLine(String.format("Rotation Pitch: %.2f degrees", Math.toDegrees(detection.pose.pitch)));
         telemetry.addLine(String.format("Rotation Roll: %.2f degrees", Math.toDegrees(detection.pose.roll)));
     }
-}
+
+   }
